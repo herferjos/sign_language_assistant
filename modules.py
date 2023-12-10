@@ -1,7 +1,8 @@
 import random
 import torch
 from transformers import AutoModelForImageClassification, AutoImageProcessor
-
+from PIL import Image
+import os
 
 @st.cache_resource
 def load_model():
@@ -36,3 +37,24 @@ def image2text(images):
 
 
 def text2image(text):
+    # Directory where the images for letters and space are located
+    images_directory = "Lenguaje signos"
+
+    # Create a list to store the paths of resulting images
+    resulting_images = []
+
+    # Iterate through the text
+    for character in text:
+        # If the character is a space, assign an image for space
+        if character == ' ':
+            image_path = os.path.join(images_directory, '_.jpg')
+        else:
+            # If it's a letter, assume that the images have names like 'A.jpg', 'B.jpg', etc.
+            image_path = os.path.join(images_directory, f'{character.upper()}.jpg')
+
+        # Add the image path to the list
+        resulting_images.append(image_path)
+
+    return resulting_images
+
+
