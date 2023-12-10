@@ -15,7 +15,7 @@ if 'predictions' not in st.session_state:
 if st.button("Start Webcam"):
     cap = cv2.VideoCapture(0)
 
- stop_button = st.button("Stop Webcam")
+stop_button = st.button("Stop Webcam")
 
 while cap is not None and stop_button is False:
     ret, frame = cap.read()
