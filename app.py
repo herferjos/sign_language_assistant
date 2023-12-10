@@ -6,40 +6,26 @@ import modules
 
 st.title("Webcam Image Classification")
 
-# Inicializar la webcam al hacer clic en un botón
-start_button = st.button("Start Webcam")
-stop_button = st.button("Stop Webcam")
+if 'cap' not in st.session_state:
+    st.session_state.cap = None
+    
+if 'predictions' not in st.session_state:
+    st.session_state.predictions = ""
 
-cap = None
-image_list = []  # Lista para almacenar imágenes capturadas
+if st.button("Start Webcam"):
+    cap = cv2.VideoCapture(0)
 
-if start_button:
-    cap = cv2.VideoCapture(0)  # 0 corresponde a la webcam predeterminada
+ stop_button = st.button("Stop Webcam")
 
-# Bucle principal
 while cap is not None and stop_button is False:
     ret, frame = cap.read()
 
-    # Almacena el frame en la lista
-    image_list.append(frame)
+    st.session_state.predictions = st.session_state.predictions + (image2text(frame))
 
-    # Limita la lista a las últimas 20 imágenes
-    image_list = image_list[-20:]
-
-    # Muestra la imagen más reciente
-    st.image(frame, channels="BGR", use_column_width=True, caption="Latest Image")
-
-    # Realiza la clasificación de imágenes cada 10 frames
-    if len(image_list) % 10 == 0:
-        predictions = image2text(image_list)
-
-        # Muestra las predicciones
-        st.text("Predictions: " + "".join(predictions))
-
-# Liberar recursos al finalizar
-if cap is not None:
+if stop_button is True:
     cap.release()
+    st.write(st.session_state.predictions)
 
-# Botón para limpiar la lista de imágenes
-if st.button("Clear Images"):
-    image_list = []
+    if st.button("Restart"):
+        st.session_state.predictions = ""
+        st.rerun()
