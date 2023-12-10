@@ -37,9 +37,6 @@ while True:
             # Muestra las predicciones
             st.text("Predictions: " + "".join(predictions))
 
-    # Botón para desactivar el reconocimiento de imágenes
-    recognition_enabled = st.checkbox("Enable Image Recognition")
-
     # Botón para limpiar la lista de imágenes
     if st.button("Clear Images"):
         image_list = []
