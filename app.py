@@ -6,41 +6,40 @@ import modules
 
 st.title("Webcam Image Classification")
 
-# Checkbox para activar/desactivar el reconocimiento de imágenes
-recognition_enabled = st.checkbox("Enable Image Recognition")
+# Inicializar la webcam al hacer clic en un botón
+start_button = st.button("Start Webcam")
+stop_button = st.button("Stop Webcam")
 
-# Si la casilla de verificación está marcada, inicializar la webcam
-if recognition_enabled:
-    cap = cv2.VideoCapture(0)  # 0 corresponde a la webcam predeterminada
-else:
-    cap = None
-
+cap = None
 image_list = []  # Lista para almacenar imágenes capturadas
 
-while True:
-    if recognition_enabled and cap is not None:
-        ret, frame = cap.read()
+if start_button:
+    cap = cv2.VideoCapture(0)  # 0 corresponde a la webcam predeterminada
 
-        # Almacena el frame en la lista
-        image_list.append(frame)
+# Bucle principal
+while cap is not None and stop_button is False:
+    ret, frame = cap.read()
 
-        # Limita la lista a las últimas 20 imágenes
-        image_list = image_list[-20:]
+    # Almacena el frame en la lista
+    image_list.append(frame)
 
-        # Muestra la imagen más reciente
-        st.image(frame, channels="BGR", use_column_width=True, caption="Latest Image")
+    # Limita la lista a las últimas 20 imágenes
+    image_list = image_list[-20:]
 
-        # Realiza la clasificación de imágenes cada 10 frames
-        if len(image_list) % 10 == 0:
-            predictions = image2text(image_list)
+    # Muestra la imagen más reciente
+    st.image(frame, channels="BGR", use_column_width=True, caption="Latest Image")
 
-            # Muestra las predicciones
-            st.text("Predictions: " + "".join(predictions))
+    # Realiza la clasificación de imágenes cada 10 frames
+    if len(image_list) % 10 == 0:
+        predictions = image2text(image_list)
 
-    # Botón para limpiar la lista de imágenes
-    if st.button("Clear Images"):
-        image_list = []
+        # Muestra las predicciones
+        st.text("Predictions: " + "".join(predictions))
 
 # Liberar recursos al finalizar
 if cap is not None:
     cap.release()
+
+# Botón para limpiar la lista de imágenes
+if st.button("Clear Images"):
+    image_list = []
