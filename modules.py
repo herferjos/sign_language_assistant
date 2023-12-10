@@ -7,6 +7,7 @@ from openai import OpenAI
 import streamlit as st
 from gtts import gTTS
 from io import BytesIO
+import cv2
 
 client = OpenAI(api_key = st.secrets['api_key'])
 
@@ -84,3 +85,16 @@ def text2audio(text_to_speak):
     mp3_path = "generated_audio.mp3"
     with open(mp3_path, "wb") as mp3_file:
         mp3_file.write(mp3_fp.read())
+
+
+def get_webcam_frame():
+    cap = cv2.VideoCapture(0)  # 0 corresponds to the default webcam
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            print("Failed to grab frame")
+            break
+        yield frame
+
+    cap.release()
+
