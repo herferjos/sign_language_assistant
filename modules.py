@@ -19,7 +19,7 @@ def load_model():
   image_processor = AutoImageProcessor.from_pretrained(repo)
   model = AutoModelForImageClassification.from_pretrained(repo)
 
-return image_processor, model
+  return image_processor, model
 
 
 
