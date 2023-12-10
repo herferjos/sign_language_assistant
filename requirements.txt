@@ -3,3 +3,4 @@ datasets
 gTTS
 openai
 opencv-python-headless
+torch
