@@ -23,24 +23,21 @@ def load_model():
 
 
 
-def image2text(images):
-  texto = ""
+def image2text(image):
+    
+  image_processor, model = load_model()
 
-  for image in images:
-    
-    image_processor, model = load_model()
-  
-    encoding = image_processor(image.convert("RGB"), return_tensors="pt")
-  
-    with torch.no_grad():
-        outputs = model(**encoding)
-        logits = outputs.logits
-  
-    predicted_class_idx = logits.argmax(-1).item()
-  
-    texto = texto + model.config.id2label[predicted_class_idx]
-    
-  return texto
+  encoding = image_processor(image.convert("RGB"), return_tensors="pt")
+
+  with torch.no_grad():
+      outputs = model(**encoding)
+      logits = outputs.logits
+
+  predicted_class_idx = logits.argmax(-1).item()
+  if logits.softmax(-1).max(-1).values.item() < 0.1:
+    return " "
+  else:
+    return model.config.id2label[predicted_class_idx]
 
 
 def text2image(text):
