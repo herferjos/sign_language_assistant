@@ -1,8 +1,7 @@
 import cv2
 import streamlit as st
 import numpy as np
-# from modules import image2text
-import modules
+from modules import image2text
 
 st.title("Webcam Image Classification")
 
