@@ -2,4 +2,4 @@ transformers
 datasets
 gTTS
 openai
-opencv-python
+opencv-python-headless
